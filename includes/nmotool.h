@@ -19,6 +19,7 @@ typedef struct	s_text
 {
 	void		*start;
 	void		*end;
+	uint64_t	diff;
 }				t_text;
 
 void			print_ptr_to_hex(size_t ptr, boolean_t prefix, boolean_t full);

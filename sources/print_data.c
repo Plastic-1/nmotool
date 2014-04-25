@@ -27,7 +27,7 @@ void	print_byte_to_hex(unsigned char byte)
 		if (char_hex < 10)
 			str[count] = char_hex + '0';
 		else
-			str[count] = (char_hex % 10) + 'A';
+			str[count] = (char_hex % 10) + 'a';
 	}
 	ft_putchar_fd(str[1], 1);
 	ft_putchar_fd(str[0], 1);
@@ -47,9 +47,9 @@ void	print_ptr_to_hex(size_t ptr, boolean_t prefix, boolean_t full)
 		if (char_hex < 10)
 			str[count] = char_hex + '0';
 		else
-			str[count] = (char_hex % 10) + 'A';
+			str[count] = (char_hex % 10) + 'a';
 	}
-	count -= 5;
+	count--;
 	if (prefix)
 		ft_putstr_fd("0x", 1);
 	if (!full)
