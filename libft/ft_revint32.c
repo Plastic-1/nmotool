@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nmotool.h                                          :+:      :+:    :+:   */
+/*   ft_revint32.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/04/23 18:11:04 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/25 15:04:16 by aeddi            ###   ########.fr       */
+/*   Created: 2014/04/25 17:54:19 by aeddi             #+#    #+#             */
+/*   Updated: 2014/04/25 17:54:23 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef NMOTOOL_H
-# define NMOTOOL_H
+#include <stdint.h>
 
-# include <mach/boolean.h>
-
-typedef struct	s_text
+uint32_t	ft_revint32(uint32_t nb)
 {
-	void		*start;
-	void		*end;
-}				t_text;
+	uint32_t	rev;
 
-void			print_ptr_to_hex(size_t ptr, boolean_t prefix, boolean_t full);
-void			print_byte_to_hex(unsigned char byte);
-
-#endif
+	rev = ((nb>>24) & 0xff)	|
+	((nb<<8) & 0xff0000)	|
+	((nb>>8) & 0xff00)		|
+	((nb<<24) & 0xff000000);
+	return (rev);
+}

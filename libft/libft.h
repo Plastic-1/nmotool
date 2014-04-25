@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/19 13:39:49 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/16 14:40:45 by aeddi            ###   ########.fr       */
+/*   Updated: 2014/04/25 17:53:48 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdint.h>
 # include "libft_struct.h"
 
 # define BUFF_SIZE 1024
@@ -103,6 +104,8 @@ int			ft_strcount(const char *s1, const char *s2);
 char		*ft_strreplace(char *s1, char *old, char *new);
 char		*ft_strjoin_tw(const char *s1, const char *s2, const char *s3);
 void		ft_skip_space(char **str);
+uint32_t	ft_revint32(uint32_t nb);
+uint64_t	ft_revint64(uint64_t nb);
 
 /*
 ** Double linked lists

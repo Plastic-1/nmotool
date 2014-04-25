@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 14:43:16 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/23 19:39:54 by aeddi            ###   ########.fr       */
+/*   Updated: 2014/04/25 18:09:41 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <mach-o/fat.h>
 #include <mach-o/loader.h>
+#include <nmotool.h>
 
 int		error_printer(char *str, int fd)
 {
@@ -26,20 +27,45 @@ int		error_printer(char *str, int fd)
 	return (1);
 }
 
-int		ft_otool(void *ptr, size_t size)
+void	display_text_section(t_text *text)
 {
-	struct fat_header		*fat;
+	(void)text;
+}
+
+void	find_text_section(t_text *text, struct mach_header_64 *mach)
+{
+	(void)text;
+	ft_putstr("Found : ");
+	print_ptr_to_hex((size_t)mach, TRUE, FALSE);
+	ft_putstr("\n");
+}
+
+int		ft_otool(void *ptr)
+{
+	struct fat_header		*fath;
+	struct fat_arch			*fatar;
 	struct mach_header_64	*mach;
-	t_bin					*list;
+	size_t					i;
+	t_text					text;
 
-	fat = (struct fat_header *)ptr;
+	i = 0;
+	text.start = NULL;
+	fath = (struct fat_header *)ptr;
 	mach = (struct mach_header_64 *)ptr;
-	if (fat->magic == FAT_CIGAM)
+	if (fath->magic == FAT_CIGAM)
 	{
-		add_header();
+		fatar = (struct fat_arch *)(fath + 1);
+		while (i++ < ft_revint32(fath->nfat_arch))
+		{
+			mach = (void *)((char *)ptr + ft_revint32(fatar->offset));
+			if (mach->magic == MH_MAGIC_64)
+				find_text_section(&text, mach);
+			fatar += 1;
+		}
 	}
-	else if (mach->magic == MH_CIGAM_64)
-
+	else if (mach->magic == MH_MAGIC_64)
+		find_text_section(&text, mach);
+	display_text_section(&text);
 	return (0);
 }
 
@@ -58,7 +84,7 @@ ret = 0;
 	fstat(fd, &stat);
 	if ((ptr = mmap(0, stat.st_size, PROT_READ, MAP_SHARED, fd, 0)) == (void *)-1)
 		return (error_printer("error: file maping impossible", fd));
-	ft_otool(ptr, stat.st_size);
+	ft_otool(ptr);
 	if (munmap(ptr, stat.st_size) == -1)
 		return (error_printer("error: file unmaping impossible", fd));
 	if (close(fd) == -1)

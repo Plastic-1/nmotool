@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/18 16:31:52 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/23 18:15:05 by aeddi            ###   ########.fr       */
+/*   Updated: 2014/04/25 15:04:18 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	print_byte_to_hex(unsigned char byte)
 	ft_putchar_fd(str[0], 1);
 }
 
-void	print_ptr_to_hex(size_t ptr, t_bool prefix, t_bool full)
+void	print_ptr_to_hex(size_t ptr, boolean_t prefix, boolean_t full)
 {
 	char	str[16];
 	short	count;

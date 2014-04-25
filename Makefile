@@ -6,7 +6,7 @@
 #    By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/12/14 16:00:35 by aeddi             #+#    #+#              #
-#    Updated: 2014/04/23 18:07:55 by aeddi            ###   ########.fr        #
+#    Updated: 2014/04/25 15:07:03 by aeddi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ SRCS_DIR		=	./sources
 OBJS			=	$(patsubst %.c, $(OBJS_DIR)/%.o, $(SRCS))
 OBJS2			=	$(patsubst %.c, $(OBJS_DIR)/%.o, $(SRCS2))
 SRCS			=	ft_nm.c
-SRCS2			=	ft_otool.c
+SRCS2			=	ft_otool.c		\
+					print_data.c
 
 all				:	$(NAME) $(NAME2)
 
