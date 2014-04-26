@@ -27,7 +27,9 @@ SRCS_DIR		=	./sources
 OBJS			=	$(patsubst %.c, $(OBJS_DIR)/%.o, $(SRCS))
 OBJS2			=	$(patsubst %.c, $(OBJS_DIR)/%.o, $(SRCS2))
 SRCS			=	ft_nm.c
-SRCS2			=	ft_otool.c		\
+SRCS2			=	ft_otool.c			\
+					ft_otool_aux32.c	\
+					ft_otool_aux64.c	\
 					print_data.c
 
 all				:	$(NAME) $(NAME2)

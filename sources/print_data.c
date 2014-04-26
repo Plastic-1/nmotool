@@ -13,6 +13,14 @@
 #include <libft.h>
 #include <nmotool.h>
 
+int		error_printer(char *str, int fd)
+{
+	ft_putendl(str);
+	if (fd && close(fd) == -1)
+		ft_putendl("error: file closing impossible");
+	return (1);
+}
+
 void	print_byte_to_hex(unsigned char byte)
 {
 	char	str[2];
@@ -33,7 +41,7 @@ void	print_byte_to_hex(unsigned char byte)
 	ft_putchar_fd(str[0], 1);
 }
 
-void	print_ptr_to_hex(size_t ptr, boolean_t prefix, boolean_t full)
+void	print_ptr_to_hex(size_t ptr, boolean_t prefix, boolean_t len64)
 {
 	char	str[16];
 	short	count;
@@ -50,11 +58,10 @@ void	print_ptr_to_hex(size_t ptr, boolean_t prefix, boolean_t full)
 			str[count] = (char_hex % 10) + 'a';
 	}
 	count--;
+	if (!len64)
+		count -= 8;
 	if (prefix)
 		ft_putstr_fd("0x", 1);
-	if (!full)
-		while (str[count] == '0')
-			count--;
 	while (count >= 0)
 	{
 		ft_putchar_fd(str[count], 1);
