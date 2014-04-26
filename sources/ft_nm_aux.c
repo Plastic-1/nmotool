@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/23 18:04:11 by aeddi            ###   ########.fr       */
+/*   Updated: 2014/04/26 19:21:22 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	find_print_symbol32(t_text *text, struct mach_header *mach)
 			{
 				if ((elem[i].n_type & N_TYPE) == N_UNDF)
 					ft_putstr("U ");
-				else if ((elem[i].n_type & N_TYPE) == N_ABS)
+				else if (elem[i].n_sect & N_SECT)
 					ft_putstr("T ");
 				else if (!(elem[i].n_type & N_STAB))
 					ft_putstr("T ");
