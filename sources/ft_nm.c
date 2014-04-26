@@ -83,7 +83,7 @@ void	find_simple_header(void *ptr, t_text *text)
 		text->mach32 = (struct mach_header *)machtmp;
 }
 
-int		ft_nm(void *ptr, char *file)
+int		ft_nm(void *ptr)
 {
 	struct fat_header		*fat;
 	t_text					text;
@@ -98,15 +98,9 @@ int		ft_nm(void *ptr, char *file)
 	else
 		find_simple_header(ptr, &text);
 	if (text.mach64)
-	{
-		find_text_sec64(&text, text.mach64);
-		display_text_sec64(&text, file);
-	}
+		find_print_symbol64(&text, text.mach64);
 	else if (text.mach32)
-	{
-		find_text_sec32(&text, text.mach32);
-		display_text_sec32(&text, file);
-	}
+		find_print_symbol32(&text, text.mach32);
 	else
 		return (1);
 	return (0);
@@ -125,7 +119,7 @@ int		main(int ac, char **av)
 	fstat(fd, &s);
 	if ((ptr = mmap(0, s.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == (void *)-1)
 		return (error_printer("error: file maping impossible", fd));
-	if (ft_nm(ptr, av[1]))
+	if (ft_nm(ptr))
 	{
 		ft_putstr(av[1]);
 		ft_putendl(": is not an object file");

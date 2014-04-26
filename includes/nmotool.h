@@ -39,4 +39,10 @@ void			display_text_sec32(t_text *text, char *file);
 void			find_text_sec32(t_text *text, struct mach_header *mach);
 void			display_text_sec64(t_text *text, char *file);
 void			find_text_sec64(t_text *text, struct mach_header_64 *mach);
+
+/*
+** Aux otool functions
+*/
+void			find_print_symbol32(t_text *text, struct mach_header *mach);
+void			find_print_symbol64(t_text *text, struct mach_header_64 *mach);
 #endif
