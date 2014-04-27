@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/23 18:04:11 by aeddi            ###   ########.fr       */
+/*   Updated: 2014/04/27 16:41:58 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ void	fat_filter_big_end(void *ptr, t_text *text)
 	{
 		machtmp = (void *)((char *)ptr + ft_revint32(fatar->offset));
 		if (machtmp->magic == MH_MAGIC_64
-			&& machtmp->cputype == (cpu_type_t)0x1000007
-			&& machtmp->cpusubtype == (cpu_subtype_t)0x80000003)
+			&& machtmp->cputype == X64T
+			&& machtmp->cpusubtype == X64ST)
 			text->mach64 = machtmp;
 		else if (machtmp->magic == MH_MAGIC
-				&& machtmp->cputype == (cpu_type_t)0x0000007
-				&& machtmp->cpusubtype == (cpu_subtype_t)0x00000003)
+				&& machtmp->cputype == X86T
+				&& machtmp->cpusubtype == X86ST)
 			text->mach32 = (struct mach_header *)machtmp;
 		fatar += 1;
 	}
@@ -57,12 +57,12 @@ void	fat_filter_litl_end(void *ptr, t_text *text)
 	{
 		machtmp = (void *)((char *)ptr + fatar->offset);
 		if (machtmp->magic == MH_MAGIC_64
-			&& machtmp->cputype == (cpu_type_t)0x1000007
-			&& machtmp->cpusubtype == (cpu_subtype_t)0x80000003)
+			&& machtmp->cputype == X64T
+			&& machtmp->cpusubtype == X64ST)
 			text->mach64 = machtmp;
 		else if (machtmp->magic == MH_MAGIC
-				&& machtmp->cputype == (cpu_type_t)0x0000007
-				&& machtmp->cpusubtype == (cpu_subtype_t)0x00000003)
+				&& machtmp->cputype == X86T
+				&& machtmp->cpusubtype == X86ST)
 			text->mach32 = (struct mach_header *)machtmp;
 		fatar += 1;
 	}
@@ -74,16 +74,16 @@ void	find_simple_header(void *ptr, t_text *text)
 
 	machtmp = (struct mach_header_64 *)ptr;
 	if (machtmp->magic == MH_MAGIC_64
-		&& machtmp->cputype == (cpu_type_t)0x1000007
-		&& machtmp->cpusubtype == (cpu_subtype_t)0x80000003)
+		&& machtmp->cputype == X64T
+		&& machtmp->cpusubtype == X64ST)
 		text->mach64 = machtmp;
 	else if (machtmp->magic == MH_MAGIC
-		&& machtmp->cputype == (cpu_type_t)0x0000007
-		&& machtmp->cpusubtype == (cpu_subtype_t)0x00000003)
+			&& machtmp->cputype == X86T
+			&& machtmp->cpusubtype == X86ST)
 		text->mach32 = (struct mach_header *)machtmp;
 }
 
-int		ft_nm(void *ptr)
+void	ft_nm(void *ptr)
 {
 	struct fat_header		*fat;
 	t_text					text;
@@ -101,9 +101,6 @@ int		ft_nm(void *ptr)
 		find_print_symbol64(&text);
 	else if (text.mach32)
 		find_print_symbol32(&text);
-	else
-		return (1);
-	return (0);
 }
 
 int		main(int ac, char **av)
@@ -113,17 +110,13 @@ int		main(int ac, char **av)
 	int			fd;
 
 	if (ac != 2)
-		return (error_printer("usage ./otool binary", 0));
+		return (error_printer("usage ./nm binary", 0));
 	if ((fd = open(av[1], O_RDONLY)) < 2)
 		return (error_printer("error: file openning impossible", 0));
 	fstat(fd, &s);
 	if ((ptr = mmap(0, s.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == (void *)-1)
 		return (error_printer("error: file maping impossible", fd));
-	if (ft_nm(ptr))
-	{
-		ft_putstr(av[1]);
-		ft_putendl(": is not an object file");
-	}
+	ft_nm(ptr);
 	if (munmap(ptr, s.st_size) == -1)
 		return (error_printer("error: file unmaping impossible", fd));
 	if (close(fd) == -1)

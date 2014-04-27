@@ -6,13 +6,13 @@
 #    By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/12/14 16:00:35 by aeddi             #+#    #+#              #
-#    Updated: 2014/04/25 15:07:03 by aeddi            ###   ########.fr        #
+#    Updated: 2014/04/27 14:23:26 by aeddi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			=	ft_nm
 NAME2			=	ft_otool
-CC				=	gcc
+CC				=	cc
 GDB				?=	0
 ifeq ($(GDB), 1)
 	CFLAGS		=	-Wall -Wextra -Werror -pedantic -g3 -I $(LIBFT_DIR) -I $(INCS_DIR)

@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 14:43:16 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/26 18:03:58 by aeddi            ###   ########.fr       */
+/*   Updated: 2014/04/27 15:33:45 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ void	fat_filter_big_end(void *ptr, t_text *text)
 	{
 		machtmp = (void *)((char *)ptr + ft_revint32(fatar->offset));
 		if (machtmp->magic == MH_MAGIC_64
-			&& machtmp->cputype == (cpu_type_t)0x1000007
-			&& machtmp->cpusubtype == (cpu_subtype_t)0x80000003)
+			&& machtmp->cputype == X64T
+			&& machtmp->cpusubtype == X64ST)
 			text->mach64 = machtmp;
 		else if (machtmp->magic == MH_MAGIC
-				&& machtmp->cputype == (cpu_type_t)0x0000007
-				&& machtmp->cpusubtype == (cpu_subtype_t)0x00000003)
+				&& machtmp->cputype == X86T
+				&& machtmp->cpusubtype == X86ST)
 			text->mach32 = (struct mach_header *)machtmp;
 		fatar += 1;
 	}
@@ -57,12 +57,12 @@ void	fat_filter_litl_end(void *ptr, t_text *text)
 	{
 		machtmp = (void *)((char *)ptr + fatar->offset);
 		if (machtmp->magic == MH_MAGIC_64
-			&& machtmp->cputype == (cpu_type_t)0x1000007
-			&& machtmp->cpusubtype == (cpu_subtype_t)0x80000003)
+			&& machtmp->cputype == X64T
+			&& machtmp->cpusubtype == X64ST)
 			text->mach64 = machtmp;
 		else if (machtmp->magic == MH_MAGIC
-				&& machtmp->cputype == (cpu_type_t)0x0000007
-				&& machtmp->cpusubtype == (cpu_subtype_t)0x00000003)
+				&& machtmp->cputype == X86T
+				&& machtmp->cpusubtype == X86ST)
 			text->mach32 = (struct mach_header *)machtmp;
 		fatar += 1;
 	}
@@ -74,12 +74,12 @@ void	find_simple_header(void *ptr, t_text *text)
 
 	machtmp = (struct mach_header_64 *)ptr;
 	if (machtmp->magic == MH_MAGIC_64
-		&& machtmp->cputype == (cpu_type_t)0x1000007
-		&& machtmp->cpusubtype == (cpu_subtype_t)0x80000003)
+		&& machtmp->cputype == X64T
+		&& machtmp->cpusubtype == X64ST)
 		text->mach64 = machtmp;
 	else if (machtmp->magic == MH_MAGIC
-		&& machtmp->cputype == (cpu_type_t)0x0000007
-		&& machtmp->cpusubtype == (cpu_subtype_t)0x00000003)
+			&& machtmp->cputype == X86T
+			&& machtmp->cpusubtype == X86ST)
 		text->mach32 = (struct mach_header *)machtmp;
 }
 

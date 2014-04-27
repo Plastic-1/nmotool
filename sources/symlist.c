@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/26 19:21:22 by aeddi            ###   ########.fr       */
+/*   Updated: 2014/04/27 16:40:23 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_symlist	*add_sym(char *name, struct nlist *nl32, struct nlist_64 *nl64)
 	return (new);
 }
 
-static void	free_symlist(t_symlist *root)
+void		free_symlist(t_symlist *root)
 {
 	t_symlist	*tmp1;
 	t_symlist	*tmp2;
@@ -103,12 +103,17 @@ t_symlist	*sort_list64(t_symlist *root)
 void		print_list(t_symlist *root)
 {
 	t_symlist	*tmp;
+	char		c;
 
 	tmp = root;
 	while (tmp)
 	{
+		if (tmp->nl32)
+			c = set_right_sym(tmp->nl32->n_type, tmp->nl32->n_sect);
+		else if (tmp->nl64)
+			c = set_right_sym(tmp->nl64->n_type, tmp->nl64->n_sect);
 		if (tmp->nl32 && tmp->nl32->n_value)
-			print_ptr_to_hex(tmp->nl32->n_value, FALSE, TRUE);
+			print_ptr_to_hex(tmp->nl32->n_value, FALSE, FALSE);
 		else if (tmp->nl32 && !tmp->nl32->n_value)
 			ft_putstr("        ");
 		else if (tmp->nl64 && tmp->nl64->n_value)
@@ -116,13 +121,9 @@ void		print_list(t_symlist *root)
 		else if (tmp->nl64 && !tmp->nl64->n_value)
 			ft_putstr("                ");
 		ft_putchar(' ');
-		if (tmp->nl32)
-			ft_putchar(set_right_sym(tmp->nl32->n_type, tmp->nl32->n_sect));
-		else if (tmp->nl64)
-			ft_putchar(set_right_sym(tmp->nl64->n_type, tmp->nl64->n_sect));
+		ft_putchar(c);
 		ft_putchar(' ');
 		ft_putendl(tmp->name);
 		tmp = tmp->next;
 	}
-	free_symlist(root);
 }
