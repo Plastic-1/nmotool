@@ -28,7 +28,8 @@ OBJS			=	$(patsubst %.c, $(OBJS_DIR)/%.o, $(SRCS))
 OBJS2			=	$(patsubst %.c, $(OBJS_DIR)/%.o, $(SRCS2))
 SRCS			=	ft_nm.c			\
 					ft_nm_aux.c		\
-					print_data.c
+					print_data.c	\
+					symlist.c
 SRCS2			=	ft_otool.c		\
 					ft_otool_aux.c	\
 					print_data.c

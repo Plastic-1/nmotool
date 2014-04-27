@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_nm_aux32.c                                      :+:      :+:    :+:   */
+/*   ft_nm_aux.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,98 +15,118 @@
 #include <mach-o/nlist.h>
 #include <nmotool.h>
 
-void	find_print_symbol32(t_text *text, struct mach_header *mach)
+static void	fill_list32(struct symtab_command *sym, t_symlist **root, void *ptr)
+{
+	char						*name;
+	struct nlist				*el;
+	t_symlist					*tmp;
+	size_t						i;
+
+			i = 0;
+			name = (char *)ptr + sym->stroff;
+			el = (struct nlist *)((char *)ptr + sym->symoff);
+			while (i++ < sym->nsyms)
+			{
+				if (!(el[i].n_type & N_STAB))
+				{
+					if (!*root)
+					{
+						*root = add_sym(name + el[i].n_un.n_strx, el + i, NULL);
+						tmp = *root;
+					}
+					else
+						tmp = add_sym(name + el[i].n_un.n_strx, el + i, NULL);
+					tmp = tmp->next;
+				}
+			}
+}
+
+void		find_print_symbol32(t_text *text)
 {
 	struct segment_command	*seg;
 	struct symtab_command	*sym;
-	struct nlist			*elem;
-	char					*sym_name;
+	t_symlist				*root;
 	size_t					i;
 
-(void)text;
 	i = 0;
-	seg = (struct segment_command *)(mach + 1);
-	while (i++ < mach->ncmds)
+	seg = (struct segment_command *)(text->mach32 + 1);
+	root = NULL;
+	while (i++ < text->mach32->ncmds)
 	{
 		if (seg->cmd == LC_SYMTAB)
 		{
-			i = 0;
 			sym = (struct symtab_command *)seg;
-			sym_name = (char *)mach + sym->stroff;
-			elem = (struct nlist *)((char *)mach + sym->symoff);
-			while (i++ < sym->nsyms)
-			{
-				if ((elem[i].n_type & N_TYPE) == N_UNDF)
-					ft_putstr("U ");
-				else if (elem[i].n_sect & N_SECT)
-					ft_putstr("T ");
-				else if (!(elem[i].n_type & N_STAB))
-					ft_putstr("T ");
-				if (!(elem[i].n_type & N_STAB))
-					ft_putendl(sym_name + elem[i].n_un.n_strx);
-				/*
-				ft_putendl("=========================================");
-				ft_putendl(sym_name + elem[i].n_un.n_strx);
-				ft_putendl("=========================================");
-				ft_putchar(elem[i].n_type);
-				ft_putchar('\n');
-				ft_putchar(elem[i].n_sect);
-				ft_putchar('\n');
-				ft_putnbr(elem[i].n_desc);
-				ft_putchar('\n');
-				ft_putnbr(elem[i].n_value);
-				ft_putchar('\n');
-				*/
-			}
+			fill_list32(sym, &root, text->mach32);
+			root = sort_list32(root);
+			print_list(root);
 		}
 		seg = (struct segment_command *)((char *)seg + seg->cmdsize);
 	}
 }
 
-void	find_print_symbol64(t_text *text, struct mach_header_64 *mach)
+static void	fill_list64(struct symtab_command *sym, t_symlist **root, void *ptr)
+{
+	char						*name;
+	struct nlist_64				*el;
+	t_symlist					*tmp;
+	size_t						i;
+
+			i = 0;
+			name = (char *)ptr + sym->stroff;
+			el = (struct nlist_64 *)((char *)ptr + sym->symoff);
+			while (i++ < sym->nsyms)
+			{
+				if (!(el[i].n_type & N_STAB))
+				{
+					if (!*root)
+					{
+						*root = add_sym(name + el[i].n_un.n_strx, NULL, el + i);
+						tmp = *root;
+					}
+					else
+						tmp = add_sym(name + el[i].n_un.n_strx, NULL, el + i);
+					tmp = tmp->next;
+				}
+			}
+}
+
+void		find_print_symbol64(t_text *text)
 {
 	struct segment_command_64	*seg;
 	struct symtab_command		*sym;
-	struct nlist_64				*elem;
-	char						*sym_name;
+	t_symlist					*root;
 	size_t						i;
 
-(void)text;
 	i = 0;
-	seg = (struct segment_command_64 *)(mach + 1);
-	while (i++ < mach->ncmds)
+	seg = (struct segment_command_64 *)(text->mach64 + 1);
+	root = NULL;
+	while (i++ < text->mach64->ncmds)
 	{
 		if (seg->cmd == LC_SYMTAB)
 		{
-			i = 0;
 			sym = (struct symtab_command *)seg;
-			sym_name = (char *)mach + sym->stroff;
-			elem = (struct nlist_64 *)((char *)mach + sym->symoff);
-			while (i++ < sym->nsyms)
-			{
-				if ((elem[i].n_type & N_TYPE) == N_UNDF)
-					ft_putstr("U ");
-				else if ((elem[i].n_type & N_TYPE) == N_ABS)
-					ft_putstr("T ");
-				else if (!(elem[i].n_type & N_STAB))
-					ft_putstr("T ");
-				if (!(elem[i].n_type & N_STAB))
-					ft_putendl(sym_name + elem[i].n_un.n_strx);
-				/*
-				ft_putendl("=========================================");
-				ft_putendl(sym_name + elem[i].n_un.n_strx);
-				ft_putendl("=========================================");
-				ft_putchar(elem[i].n_type);
-				ft_putchar('\n');
-				ft_putchar(elem[i].n_sect);
-				ft_putchar('\n');
-				ft_putnbr(elem[i].n_desc);
-				ft_putchar('\n');
-				ft_putnbr(elem[i].n_value);
-				ft_putchar('\n');
-				*/
-			}
+			fill_list64(sym, &root, text->mach64);
+			root = sort_list64(root);
+			print_list(root);
 		}
 		seg = (struct segment_command_64 *)((char *)seg + seg->cmdsize);
 	}
+}
+
+char		set_right_sym(uint8_t n_type, uint16_t n_sect)
+{
+	char ret;
+
+	ret = ' ';
+	if ((n_type & N_TYPE) == N_UNDF)
+		ret = 'U';
+	else if ((n_type & N_TYPE) == N_ABS)
+		ret = 'A';
+	else if (n_sect == 1)
+		ret = 'T';
+	else if (n_sect == 9)
+		ret = 'B';
+	if (n_type & N_EXT)
+		ret += 32;
+	return (ret);
 }

@@ -98,9 +98,9 @@ int		ft_nm(void *ptr)
 	else
 		find_simple_header(ptr, &text);
 	if (text.mach64)
-		find_print_symbol64(&text, text.mach64);
+		find_print_symbol64(&text);
 	else if (text.mach32)
-		find_print_symbol32(&text, text.mach32);
+		find_print_symbol32(&text);
 	else
 		return (1);
 	return (0);
