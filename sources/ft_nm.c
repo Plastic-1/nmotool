@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/27 16:41:58 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/11 11:51:27 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <libft.h>
+#include <unistd.h>
 #include <mach-o/fat.h>
 #include <mach-o/loader.h>
 #include <nmotool.h>

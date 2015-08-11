@@ -6,7 +6,7 @@
 #    By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/12/14 16:00:35 by aeddi             #+#    #+#              #
-#    Updated: 2014/04/27 14:23:26 by aeddi            ###   ########.fr        #
+#    Updated: 2015/08/11 11:49:17 by aeddi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,9 @@ NAME2			=	ft_otool
 CC				=	cc
 GDB				?=	0
 ifeq ($(GDB), 1)
-	CFLAGS		=	-Wall -Wextra -Werror -pedantic -g3 -I $(LIBFT_DIR) -I $(INCS_DIR)
+	CFLAGS		=	-Wall -Wextra -Werror -pedantic -g3 -I $(LIBFT_DIR)/includes -I $(INCS_DIR)
 else
-	CFLAGS		=	-Wall -Wextra -Werror -pedantic -O3 -I $(LIBFT_DIR) -I $(INCS_DIR)
+	CFLAGS		=	-Wall -Wextra -Werror -pedantic -O3 -I $(LIBFT_DIR)/includes -I $(INCS_DIR)
 endif
 LFLAGS			=	-L $(LIBFT_DIR) -lft
 LIBFT_DIR		=	./libft

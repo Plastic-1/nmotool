@@ -6,11 +6,12 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 14:43:16 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/27 15:33:45 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/11 14:19:35 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
+#include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <libft.h>
@@ -18,94 +19,77 @@
 #include <mach-o/loader.h>
 #include <nmotool.h>
 
-void	fat_filter_big_end(void *ptr, t_text *text)
+		#include <stdio.h>
+
+static void	get_fat_binary_headers(void *ptr, t_text *text)
 {
-	struct fat_header		*fath;
-	struct fat_arch			*fatar;
+	struct fat_header		*fat_h;
+	struct fat_arch			*fat_ar;
 	struct mach_header_64	*machtmp;
 	size_t					i;
 
 	i = 0;
-	fath = (struct fat_header *)ptr;
-	fatar = (struct fat_arch *)(fath + 1);
-	while (i++ < ft_revint32(fath->nfat_arch))
+	fat_h = (struct fat_header *)ptr;
+	fat_ar = (struct fat_arch *)(fat_h + 1);
+	while (i++ < ft_revint32(fat_h->nfat_arch))
 	{
-		machtmp = (void *)((char *)ptr + ft_revint32(fatar->offset));
-		if (machtmp->magic == MH_MAGIC_64
-			&& machtmp->cputype == X64T
-			&& machtmp->cpusubtype == X64ST)
+		machtmp = (void *)((char *)ptr + ft_revint32(fat_ar->offset));
+		if (machtmp->magic == MH_MAGIC_64)
 			text->mach64 = machtmp;
-		else if (machtmp->magic == MH_MAGIC
-				&& machtmp->cputype == X86T
-				&& machtmp->cpusubtype == X86ST)
+		else if (machtmp->magic == MH_MAGIC)
 			text->mach32 = (struct mach_header *)machtmp;
-		fatar += 1;
+		fat_ar += 1;
 	}
 }
 
-void	fat_filter_litl_end(void *ptr, t_text *text)
-{
-	struct fat_header		*fath;
-	struct fat_arch			*fatar;
-	struct mach_header_64	*machtmp;
-	size_t					i;
-
-	i = 0;
-	fath = (struct fat_header *)ptr;
-	fatar = (struct fat_arch *)(fath + 1);
-	while (i++ < fath->nfat_arch)
-	{
-		machtmp = (void *)((char *)ptr + fatar->offset);
-		if (machtmp->magic == MH_MAGIC_64
-			&& machtmp->cputype == X64T
-			&& machtmp->cpusubtype == X64ST)
-			text->mach64 = machtmp;
-		else if (machtmp->magic == MH_MAGIC
-				&& machtmp->cputype == X86T
-				&& machtmp->cpusubtype == X86ST)
-			text->mach32 = (struct mach_header *)machtmp;
-		fatar += 1;
-	}
-}
-
-void	find_simple_header(void *ptr, t_text *text)
+static void	get_simple_binary_header(void *ptr, t_text *text)
 {
 	struct mach_header_64 *machtmp;
 
 	machtmp = (struct mach_header_64 *)ptr;
-	if (machtmp->magic == MH_MAGIC_64
-		&& machtmp->cputype == X64T
-		&& machtmp->cpusubtype == X64ST)
+	if (machtmp->magic == MH_MAGIC_64)
 		text->mach64 = machtmp;
-	else if (machtmp->magic == MH_MAGIC
-			&& machtmp->cputype == X86T
-			&& machtmp->cpusubtype == X86ST)
+	else if (machtmp->magic == MH_MAGIC)
 		text->mach32 = (struct mach_header *)machtmp;
+}
+
+void		get_binary_headers(void *ptr, t_text *text)
+{
+	struct fat_header		*fat_h;
+
+	text->mach64 = NULL;
+	text->mach32 = NULL;
+	fat_h = (struct fat_header *)ptr;
+	if (fat_h->magic == FAT_CIGAM)
+{
+printf("FAT\n");
+		get_fat_binary_headers(ptr, text);
+}
+	else
+{
+printf("SIMPLE\n");
+		get_simple_binary_header(ptr, text);
+}
 }
 
 int		ft_otool(void *ptr, char *file)
 {
-	struct fat_header		*fat;
 	t_text					text;
 
-	text.mach64 = NULL;
-	text.mach32 = NULL;
-	fat = (struct fat_header *)ptr;
-	if (fat->magic == FAT_CIGAM)
-		fat_filter_big_end(ptr, &text);
-	else if (fat->magic == FAT_MAGIC)
-		fat_filter_litl_end(ptr, &text);
-	else
-		find_simple_header(ptr, &text);
+	get_binary_headers(ptr, &text);
 	if (text.mach64)
 	{
-		find_text_sec64(&text, text.mach64);
-		display_text_sec64(&text, file);
+printf("64\n");
+(void)file;
+		/* find_text_sec64(&text, text.mach64); */
+		/* display_text_sec64(&text, file); */
 	}
-	else if (text.mach32)
+	if (text.mach32)
 	{
-		find_text_sec32(&text, text.mach32);
-		display_text_sec32(&text, file);
+(void)file;
+printf("32\n");
+		/* find_text_sec32(&text, text.mach32); */
+		/* display_text_sec32(&text, file); */
 	}
 	else
 		return (1);
@@ -119,7 +103,7 @@ int		main(int ac, char **av)
 	int			fd;
 
 	if (ac != 2)
-		return (error_printer("usage ./otool binary", 0));
+		return (error_printer("usage ./ft_otool binary", 0));
 	if ((fd = open(av[1], O_RDONLY)) < 2)
 		return (error_printer("error: file openning impossible", 0));
 	fstat(fd, &s);

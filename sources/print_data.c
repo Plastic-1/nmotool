@@ -6,11 +6,12 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/18 16:31:52 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/25 15:04:18 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/11 11:51:55 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
+#include <unistd.h>
 #include <nmotool.h>
 
 int		error_printer(char *str, int fd)
