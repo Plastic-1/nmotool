@@ -6,12 +6,13 @@
 #    By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/12/14 16:00:35 by aeddi             #+#    #+#              #
-#    Updated: 2015/08/11 11:49:17 by aeddi            ###   ########.fr        #
+#    Updated: 2015/08/13 06:10:26 by plastic          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME			=	ft_nm
-NAME2			=	ft_otool
+NAME			=	ft_otool
+NAME2			=	ft_nm
+
 CC				=	cc
 GDB				?=	0
 ifeq ($(GDB), 1)
@@ -20,34 +21,64 @@ else
 	CFLAGS		=	-Wall -Wextra -Werror -pedantic -O3 -I $(LIBFT_DIR)/includes -I $(INCS_DIR)
 endif
 LFLAGS			=	-L $(LIBFT_DIR) -lft
+
 LIBFT_DIR		=	./libft
 INCS_DIR		=	./includes
-OBJS_DIR		=	./objects
+
 SRCS_DIR		=	./sources
+SRCS			=	get_headers.c		\
+					print_hex.c			\
+					files_list.c		\
+					open_close_binary.c
+
+OBJS_DIR		=	./objects
 OBJS			=	$(patsubst %.c, $(OBJS_DIR)/%.o, $(SRCS))
-OBJS2			=	$(patsubst %.c, $(OBJS_DIR)/%.o, $(SRCS2))
-SRCS			=	ft_nm.c			\
-					ft_nm_aux.c		\
-					print_data.c	\
+
+SRCS_OT_DIR		=	$(SRCS_DIR)/ft_otool
+SRCS_OT			=	main.c				\
+					get_args.c			\
+					parse_flags.c		\
+					print_section.c		\
+					find_section_32.c	\
+					find_section_64.c
+
+OBJS_OT_DIR		=	$(OBJS_DIR)/ft_otool
+OBJS_OT			=	$(patsubst %.c, $(OBJS_OT_DIR)/%.o, $(SRCS_OT))
+
+SRCS_NM_DIR		=	$(SRCS_DIR)/ft_nm
+SRCS_NM			=	main.c					\
+					find_symbols_32.c		\
+					find_symbols_64.c		\
+					get_args.c				\
+					get_symbols_letters.c	\
+					parse_flags.c			\
+					print_symbols.c			\
 					symlist.c
-SRCS2			=	ft_otool.c		\
-					ft_otool_aux.c	\
-					print_data.c
+
+OBJS_NM_DIR		=	$(OBJS_DIR)/ft_nm
+OBJS_NM			=	$(patsubst %.c, $(OBJS_NM_DIR)/%.o, $(SRCS_NM))
 
 all				:	$(NAME) $(NAME2)
 
-$(NAME)			:	$(OBJS_DIR) $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) $(LFLAGS)
+$(NAME)			:	$(OBJS_DIR) $(OBJS) $(OBJS_OT)
+	$(CC) -o $(NAME) $(OBJS) $(OBJS_OT) $(LFLAGS)
 
-$(NAME2)		:	$(OBJS_DIR) $(OBJS2)
-	$(CC) -o $(NAME2) $(OBJS2) $(LFLAGS)
+$(NAME2)		:	$(OBJS_DIR) $(OBJS) $(OBJS_NM)
+	$(CC) -o $(NAME2) $(OBJS) $(OBJS_NM) $(LFLAGS)
 
 $(OBJS_DIR)/%.o	:	$(addprefix $(SRCS_DIR)/, %.c)
 	$(CC) $(CFLAGS) -o $@ -c $^
 
+$(OBJS_OT_DIR)/%.o	:	$(addprefix $(SRCS_OT_DIR)/, %.c)
+	$(CC) $(CFLAGS) -o $@ -c $^
+
+$(OBJS_NM_DIR)/%.o	:	$(addprefix $(SRCS_NM_DIR)/, %.c)
+	$(CC) $(CFLAGS) -o $@ -c $^
 
 $(OBJS_DIR)		:	make_libft
 	@mkdir -p $(OBJS_DIR)
+	@mkdir -p $(OBJS_OT_DIR)
+	@mkdir -p $(OBJS_NM_DIR)
 
 make_libft		:
 	@$(MAKE) -C $(LIBFT_DIR)

@@ -6,49 +6,66 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:11:04 by aeddi             #+#    #+#             */
-/*   Updated: 2014/04/27 16:13:24 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/13 05:50:48 by plastic          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef NMOTOOL_H
 # define NMOTOOL_H
 
-# include <mach/boolean.h>
 # include <struct.h>
-# define X64T (cpu_type_t)0x1000007
-# define X64ST (cpu_subtype_t)0x80000003
-# define X86T (cpu_type_t)0x0000007
-# define X86ST (cpu_subtype_t)0x00000003
 
 /*
-** Aux otool functions
+** Parse binary functions
 */
-void			display_text_sec32(t_text *text, char *file);
-void			find_text_sec32(t_text *text, struct mach_header *mach);
-void			display_text_sec64(t_text *text, char *file);
-void			find_text_sec64(t_text *text, struct mach_header_64 *mach);
+void			get_binary_headers(void *ptr, t_head *headers);
+
+void			find_section_32(t_head *headers, char *segname, char *sectname);
+void			find_section_64(t_head *headers, char *segname, char *sectname);
+
+void			find_symbols_32(t_head *headers, t_arg_nm *options);
+void			find_symbols_64(t_head *headers, t_arg_nm *options);
+
+/*
+** File functions
+*/
+int				open_binary(char *filename, t_bin *binary);
+int				close_binary(char *filename, t_bin *binary);
+
+/*
+** Parameters functions
+*/
+int				parse_flags_ot(int ac, char **av, t_arg_ot *options, size_t *cnt);
+int				get_args_ot(int ac, char **av, t_arg_ot *options);
+
+int				parse_flags_nm(int ac, char **av, t_arg_nm *options, size_t *cnt);
+int				get_args_nm(int ac, char **av, t_arg_nm *options);
 
 /*
 ** Print functions
 */
-int				error_printer(char *str, int fd);
+void			print_byte_to_hex(char byte);
 void			print_ptr_to_hex(size_t ptr, boolean_t prefix, boolean_t len64);
-void			print_byte_to_hex(unsigned char byte);
+void			print_parse_error(char *filename, char *message);
+
+void			print_section(t_sect *section, char *segname, char *sectname);
+
+void			print_list(t_symlist *root, t_arg_nm *options, boolean_t len64);
+void			get_symbols_letters(t_symlist *root, char *sect_names[]);
 
 /*
-** Aux otool functions
+** Files list functions
 */
-void			find_print_symbol32(t_text *text);
-void			find_print_symbol64(t_text *text);
-char			set_right_sym(uint8_t n_type, uint16_t n_sect);
+void			files_list_add(t_filelst **lst, char *filename);
+void			files_list_del(t_filelst **lst);
+unsigned int	files_list_count(t_filelst *lst);
 
 /*
-** Symlist functions
+** Symbols list functions
 */
-t_symlist		*add_sym(char *name, struct nlist *nl32, struct nlist_64 *nl64);
-t_symlist		*sort_list32(t_symlist *root);
-t_symlist		*sort_list64(t_symlist *root);
-void			print_list(t_symlist *root);
+t_symlist		*add_sym(char *name, void *nl, t_symlist *prv, boolean_t len64);
+t_symlist		*get_tail(t_symlist *iter);
+void			swap_symbols(t_symlist *sym_a, t_symlist *sym_b);
 void			free_symlist(t_symlist *root);
 
 #endif
