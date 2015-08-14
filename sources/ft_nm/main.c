@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/13 04:14:18 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/14 15:08:20 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	print_symbols(char *filename, t_arg_nm *options, t_head *headers)
 	}
 }
 
-static int	nm(char *filename, t_arg_nm *options, t_bin *binary)
+static int	nm(char *filename, t_arg_nm *options, t_bin *binary, size_t count)
 {
 	t_head	headers;
 
@@ -52,6 +52,8 @@ static int	nm(char *filename, t_arg_nm *options, t_bin *binary)
 		ft_putendl("is not an object file");
 		return 1;
 	}
+	if ((options->arch == A_DEF || !headers.mach32) && count > 1)
+		print_filename_arch(filename, NULL);
 	print_symbols(filename, options, &headers);
 	return 0;
 }
@@ -61,15 +63,17 @@ int			main(int ac, char **av)
 	t_bin			binary;
 	t_arg_nm		options;
 	t_filelst		*file;
+	size_t			count;
 
 	if (get_args_nm(ac, av, &options))
 		return 1;
 	file = options.files;
+	count = files_list_count(options.files);
 	while (file)
 	{
 		if (open_binary(file->name, &binary))
 			return 2;
-		if (nm(file->name, &options, &binary))
+		if (nm(file->name, &options, &binary, count))
 			return 3;
 		if (close_binary(file->name, &binary))
 			return 4;

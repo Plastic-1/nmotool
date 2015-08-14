@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 13:57:23 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/13 07:00:03 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/14 15:34:37 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ static void	get_sect_names(char *sect_names[], struct segment_command_64 *seg)
 	while (count < seg->nsects)
 	{
 		sect_names[index] = sec->sectname;
+
+ft_putnbr_fd(index, 2);
+ft_putchar_fd('\t', 2);
+ft_putstr_fd(sec->sectname, 2);
+ft_putchar_fd('\n', 2);
+
 		sec++;
 		count++;
 		index++;
