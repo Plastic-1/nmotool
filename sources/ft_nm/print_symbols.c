@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 14:52:18 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/13 06:09:11 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/13 06:59:46 by plastic          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,11 @@ static void			print_sym(t_symlist *iter, t_arg_nm *opt, boolean_t len64)
 {
 	if (!opt->p_short)
 	{
-		if (iter->n_value && len64)
-			print_ptr_to_hex(iter->n_value, FALSE, TRUE);
+		if (iter->n_value)
+			print_ptr_to_hex(iter->n_value, FALSE, len64);
 		else if (!iter->n_value && len64)
 			ft_putstr("                ");
-		else if (iter->n_value)
-			print_ptr_to_hex(iter->n_value, FALSE, FALSE);
-		else if (iter->n_value)
+		else if (!iter->n_value)
 			ft_putstr("        ");
 		ft_putchar(' ');
 		ft_putchar(iter->letter);

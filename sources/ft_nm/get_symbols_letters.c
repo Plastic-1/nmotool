@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 14:53:18 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/13 06:10:46 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/13 06:57:22 by plastic          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <libft.h>
 #include <nmotool.h>
 
-static char	match_letter_sect_name(char *sect_name, uint8_t n_type)
+static char	match_letter_sect(char *sect_name, uint8_t n_type)
 {
 	if ((n_type & N_TYPE) == N_UNDF)
 		return 'U';
@@ -22,9 +22,9 @@ static char	match_letter_sect_name(char *sect_name, uint8_t n_type)
 		return 'A';
 	else if (!ft_strcmp(sect_name, "__text"))
 		return 'T';
-	else if (!ft_strcmp(sect_name, "ZIB"))
+	else if (!ft_strcmp(sect_name, "__const"))
 		return 'S';
-	else if (!ft_strcmp(sect_name, "ZOB"))
+	else if (!ft_strcmp(sect_name, "__bss"))
 		return 'B';
 	else if (!ft_strcmp(sect_name, "__data"))
 		return 'D';
@@ -40,7 +40,7 @@ void		get_symbols_letters(t_symlist *root, char *sect_names[])
 	iter = root;
 	while (iter)
 	{
-		letter = match_letter_sect_name(sect_names[iter->n_sect], iter->n_type);
+		letter = match_letter_sect(sect_names[iter->n_sect - 1], iter->n_type);
 		if (!(iter->n_type & N_EXT) && letter != ' ')
 			letter += 32;
 		iter->letter = letter;

@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 13:57:23 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/13 06:08:33 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/13 07:00:03 by plastic          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void		find_symbols_64(t_head *headers, t_arg_nm *options)
 	root = NULL;
 	while (count < headers->mach64->ncmds)
 	{
-		if (seg->cmd == LC_SEGMENT)
+		if (seg->cmd == LC_SEGMENT_64)
 			get_sect_names(sect_names, seg);
 		if (seg->cmd == LC_SYMTAB)
 			fill_list((struct symtab_command *)seg, &root, headers->mach64);
@@ -83,7 +83,7 @@ void		find_symbols_64(t_head *headers, t_arg_nm *options)
 	if (root)
 	{
 		get_symbols_letters(root, sect_names);
-		print_list(root, options, FALSE);
+		print_list(root, options, TRUE);
 		free_symlist(root);
 	}
 }
