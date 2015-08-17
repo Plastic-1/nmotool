@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 13:57:23 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/14 15:34:37 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/15 13:46:10 by plastic          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,8 @@ static void	get_sect_names(char *sect_names[], struct segment_command_64 *seg)
 	sec = (struct section_64 *)(seg + 1);
 	while (count < seg->nsects)
 	{
+ft_putendl_fd(sec->sectname, 2);
 		sect_names[index] = sec->sectname;
-
-ft_putnbr_fd(index, 2);
-ft_putchar_fd('\t', 2);
-ft_putstr_fd(sec->sectname, 2);
-ft_putchar_fd('\n', 2);
-
 		sec++;
 		count++;
 		index++;
@@ -54,7 +49,7 @@ static void	fill_list(struct symtab_command *sym_t, t_symlist **root, void *ptr)
 		{
 			if (!*root)
 			{
-				*root = add_sym(str_t + sym[i].n_un.n_strx, sym + i, 0, FALSE);
+				*root = add_sym(str_t + sym[i].n_un.n_strx, sym + i, 0, TRUE);
 				tmp = *root;
 			}
 			else

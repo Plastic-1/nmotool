@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 14:52:18 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/14 15:25:41 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/15 10:49:23 by plastic          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 static t_symlist	*sort_list(t_symlist *root)
 {
 	short			check;
+	int				diff;
 	t_symlist		*iter;
 
 	check = 1;
@@ -27,8 +28,12 @@ static t_symlist	*sort_list(t_symlist *root)
 		iter = root;
 		while (iter->next)
 		{
-			if (ft_strcmp(iter->name, iter->next->name) > 0 && ++check)
+			diff = ft_strcmp(iter->name, iter->next->name);
+			if (diff > 0 || (!diff && iter->n_value > iter->next->n_value))
+			{
 				swap_symbols(iter, iter->next);
+				check++;
+			}
 			iter = iter->next;
 		}
 	}
@@ -40,7 +45,7 @@ static boolean_t	is_printable(t_symlist *iter, t_arg_nm *opt)
 	boolean_t	external;
 	boolean_t	undefined;
 
-	if (!(iter->n_type & N_EXT))
+	if ((iter->n_type & N_EXT))
 		external = TRUE;
 	else
 		external = FALSE;
@@ -80,7 +85,7 @@ void				print_list(t_symlist *root, t_arg_nm *opt, boolean_t len64)
 
 	if (!opt->p_unsort)
 		root = sort_list(root);
-	if (opt->p_rev)
+	if (opt->p_rev && !opt->p_unsort)
 		iter = get_tail(root);
 	else
 		iter = root;
@@ -88,7 +93,7 @@ void				print_list(t_symlist *root, t_arg_nm *opt, boolean_t len64)
 	{
 		if (is_printable(iter, opt))
 			print_sym(iter, opt, len64);
-		if (opt->p_rev)
+		if (opt->p_rev && !opt->p_unsort)
 			iter = iter->prev;
 		else
 			iter = iter->next;

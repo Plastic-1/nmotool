@@ -1,0 +1,26 @@
+#! /bin/bash
+
+COUNT=1
+
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+FILES_DIR=$SCRIPT_DIR/files
+RESULT_DIR=$SCRIPT_DIR/results
+mkdir -p $RESULT_DIR
+
+OTOOL=$SCRIPT_DIR/../ft_otool
+NM=$SCRIPT_DIR/../ft_nm
+
+for FILE in `ls $FILES_DIR`
+do
+	echo "Diff for otool on $FILE:"
+	$OTOOL -td -arch x86_64 -arch i386 -s __TEXT __const $FILES_DIR/$FILE | tee > "$RESULT_DIR/$COUNT-ot-a"
+	otool -td -arch x86_64 -arch i386 -s __TEXT __const $FILES_DIR/$FILE | tee > "$RESULT_DIR/$COUNT-ot-b"
+	diff "$RESULT_DIR/$COUNT-ot-a" "$RESULT_DIR/$COUNT-ot-b"
+
+	echo "Diff for nm on $FILE:"
+	$NM $FILES_DIR/$FILE | tee >> "$RESULT_DIR/$COUNT-nm-a"
+	nm $FILES_DIR/$FILE | tee >> "$RESULT_DIR/$COUNT-nm-b"
+	diff "$RESULT_DIR/$COUNT-nm-a" "$RESULT_DIR/$COUNT-nm-b"
+
+	COUNT=$(($COUNT+1))
+done
