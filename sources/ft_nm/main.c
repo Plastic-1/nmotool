@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/14 15:08:20 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/17 15:42:55 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	print_symbols(char *filename, t_arg_nm *options, t_head *headers)
 	}
 	if (headers->mach32 && (options->arch == A_ALL || options->arch == A_X32))
 	{
-		if (options->arch == A_ALL)
+		if (options->arch == A_ALL && headers->mach64)
 			print_filename_arch(filename, " (for architecture i386)");
 		find_symbols_32(headers, options);
 	}
@@ -46,13 +46,9 @@ static int	nm(char *filename, t_arg_nm *options, t_bin *binary, size_t count)
 
 	get_binary_headers(binary->data, &headers);
 	if (!headers.mach32 && !headers.mach64)
-	{
-		ft_putstr(filename);
-		ft_putstr(": ");
-		ft_putendl("is not an object file");
 		return 1;
-	}
-	if ((options->arch == A_DEF || !headers.mach32) && count > 1)
+	if ((options->arch == A_ALL && (!headers.mach32 || !headers.mach64))
+		&& count > 1)
 		print_filename_arch(filename, NULL);
 	print_symbols(filename, options, &headers);
 	return 0;

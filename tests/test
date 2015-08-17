@@ -3,24 +3,38 @@
 COUNT=1
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-FILES_DIR=$SCRIPT_DIR/files
 RESULT_DIR=$SCRIPT_DIR/results
 mkdir -p $RESULT_DIR
 
 OTOOL=$SCRIPT_DIR/../ft_otool
 NM=$SCRIPT_DIR/../ft_nm
 
-for FILE in `ls $FILES_DIR`
+# TEST_FILES="$SCRIPT_DIR/../objects/**/**.o "
+# TEST_FILES+="/usr/lib/**/**.dylib "
+TEST_FILES+="/usr/bin/* "
+
+for FILE in `ls $TEST_FILES`
 do
-	echo "Diff for otool on $FILE:"
-	$OTOOL -td -arch x86_64 -arch i386 -s __TEXT __const $FILES_DIR/$FILE | tee > "$RESULT_DIR/$COUNT-ot-a"
-	otool -td -arch x86_64 -arch i386 -s __TEXT __const $FILES_DIR/$FILE | tee > "$RESULT_DIR/$COUNT-ot-b"
+	echo "Diff for $FILE:"
+
+	echo "diff $RESULT_DIR/$COUNT-ot-a $RESULT_DIR/$COUNT-ot-b"
+	$OTOOL -td -arch x86_64 -arch i386 -s __TEXT __const $FILE > "$RESULT_DIR/$COUNT-ot-a" 2> /dev/null
+	otool -td -arch x86_64 -arch i386 -s __TEXT __const $FILE > "$RESULT_DIR/$COUNT-ot-b" 2> /dev/null
 	diff "$RESULT_DIR/$COUNT-ot-a" "$RESULT_DIR/$COUNT-ot-b"
 
-	echo "Diff for nm on $FILE:"
-	$NM $FILES_DIR/$FILE | tee >> "$RESULT_DIR/$COUNT-nm-a"
-	nm $FILES_DIR/$FILE | tee >> "$RESULT_DIR/$COUNT-nm-b"
+	echo "diff $RESULT_DIR/$COUNT-nm-a $RESULT_DIR/$COUNT-nm-b"
+	$NM -arch x86_64 -arch i386 $FILE > "$RESULT_DIR/$COUNT-nm-a" 2> /dev/null
+	nm -arch x86_64 -arch i386 $FILE > "$RESULT_DIR/$COUNT-nm-b" 2> /dev/null
+	# diff <(sort "$RESULT_DIR/$COUNT-nm-a") <(sort "$RESULT_DIR/$COUNT-nm-b")
 	diff "$RESULT_DIR/$COUNT-nm-a" "$RESULT_DIR/$COUNT-nm-b"
+
+	echo ""
 
 	COUNT=$(($COUNT+1))
 done
+
+cat $RESULT_DIR/*ot-a > total-a
+cat $RESULT_DIR/*nm-a >> total-a
+cat $RESULT_DIR/*ot-b > total-b
+cat $RESULT_DIR/*nm-b >> total-b
+vimdiff total-a total-b

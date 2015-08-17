@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 14:43:16 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/13 01:55:27 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/17 15:42:57 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ static void	print_filename_arch(char *filename, char *arch)
 
 static void	print_sections(t_arg_ot *options, t_head *headers, char *filename)
 {
-	if (options->arch == A_DEF || !headers->mach32)
-		print_filename_arch(filename, NULL);
 	if (headers->mach64 && (options->arch == A_ALL
 		|| options->arch == A_DEF || options->arch == A_X64))
 	{
@@ -41,7 +39,7 @@ static void	print_sections(t_arg_ot *options, t_head *headers, char *filename)
 	}
 	if (headers->mach32 && (options->arch == A_ALL || options->arch == A_X32))
 	{
-		if (options->arch == A_ALL)
+		if (options->arch == A_ALL && headers->mach64)
 			print_filename_arch(filename, " (architecture i386)");
 		if (options->p_text)
 			find_section_32(headers, "__TEXT", "__text");
@@ -64,6 +62,8 @@ static int	otool(char *filename, t_arg_ot *options, t_bin *binary)
 		ft_putendl("is not an object file");
 		return 1;
 	}
+	if (options->arch == A_ALL && (!headers.mach32 || !headers.mach64))
+		print_filename_arch(filename, NULL);
 	print_sections(options, &headers, filename);
 	return 0;
 }

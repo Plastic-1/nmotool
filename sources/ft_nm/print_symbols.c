@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 14:52:18 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/15 10:49:23 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/17 14:55:40 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_symlist	*sort_list(t_symlist *root)
 		while (iter->next)
 		{
 			diff = ft_strcmp(iter->name, iter->next->name);
-			if (diff > 0 || (!diff && iter->n_value > iter->next->n_value))
+			if (diff > 0 /*|| (!diff && iter->n_value > iter->next->n_value)*/)
 			{
 				swap_symbols(iter, iter->next);
 				check++;
