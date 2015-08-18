@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 14:53:18 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/17 15:01:30 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/18 17:56:17 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	match_letter_sect(char *sect_name)
 {
 	if (ft_strnstr(sect_name, "__text", 6)
 			|| ft_strnstr(sect_name, "__os_", 5))
-		return 'T';
+		return ('T');
 	else if (ft_strnstr(sect_name, "__const", 7)
 			|| ft_strnstr(sect_name, "__gcc_except_tab", 16)
 			|| ft_strnstr(sect_name, "__ustring", 9)
@@ -27,13 +27,15 @@ static char	match_letter_sect(char *sect_name)
 			|| ft_strnstr(sect_name, "__crash_info", 12)
 			|| ft_strnstr(sect_name, "__objc_", 7)
 			|| ft_strnstr(sect_name, "__xcrun_shim", 12)
-			|| ft_strnstr(sect_name, "__common", 8))
-		return 'S';
+			|| ft_strnstr(sect_name, "__common", 8)
+			|| ft_strnstr(sect_name, "__dyld", 6)
+			|| ft_strnstr(sect_name, "__class", 7))
+		return ('S');
 	else if (ft_strnstr(sect_name, "__bss", 5))
-		return 'B';
+		return ('B');
 	else if (ft_strnstr(sect_name, "__data", 6))
-		return 'D';
-	return ' ';
+		return ('D');
+	return (' ');
 }
 
 void		get_symbols_letters(t_symlist *root, char *sect_names[])

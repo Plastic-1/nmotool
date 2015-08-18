@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 14:43:16 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/12 06:55:08 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/18 17:43:57 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ unsigned int	files_list_count(t_filelst *lst)
 		lst = lst->next;
 		count++;
 	}
-	return count;
+	return (count);
 }

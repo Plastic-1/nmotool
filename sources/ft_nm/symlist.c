@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/13 05:49:09 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/18 18:00:20 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <mach-o/loader.h>
 #include <nmotool.h>
 
-t_symlist	*add_sym(char *name, void *nlist, t_symlist	*prev, boolean_t len64)
+t_symlist	*add_sym(char *name, void *nlist, t_symlist *prev, boolean_t len64)
 {
 	t_symlist		*new;
 	struct nlist_64	*sym64;
@@ -71,7 +71,7 @@ t_symlist	*get_tail(t_symlist *iter)
 {
 	while (iter && iter->next)
 		iter = iter->next;
-	return iter;
+	return (iter);
 }
 
 void		free_symlist(t_symlist *root)

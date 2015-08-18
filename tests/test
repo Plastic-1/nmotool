@@ -10,8 +10,8 @@ OTOOL=$SCRIPT_DIR/../ft_otool
 NM=$SCRIPT_DIR/../ft_nm
 
 # TEST_FILES="$SCRIPT_DIR/../objects/**/**.o "
-# TEST_FILES+="/usr/lib/**/**.dylib "
-TEST_FILES+="/usr/bin/* "
+TEST_FILES+="/usr/lib/*.dylib "
+# TEST_FILES+="/usr/bin/* "
 
 for FILE in `ls $TEST_FILES`
 do
@@ -32,9 +32,3 @@ do
 
 	COUNT=$(($COUNT+1))
 done
-
-cat $RESULT_DIR/*ot-a > total-a
-cat $RESULT_DIR/*nm-a >> total-a
-cat $RESULT_DIR/*ot-b > total-b
-cat $RESULT_DIR/*nm-b >> total-b
-vimdiff total-a total-b

@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/17 15:42:55 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/18 17:56:59 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ static int	nm(char *filename, t_arg_nm *options, t_bin *binary, size_t count)
 
 	get_binary_headers(binary->data, &headers);
 	if (!headers.mach32 && !headers.mach64)
-		return 1;
+		return (1);
 	if ((options->arch == A_ALL && (!headers.mach32 || !headers.mach64))
 		&& count > 1)
 		print_filename_arch(filename, NULL);
 	print_symbols(filename, options, &headers);
-	return 0;
+	return (0);
 }
 
 int			main(int ac, char **av)
@@ -62,19 +62,19 @@ int			main(int ac, char **av)
 	size_t			count;
 
 	if (get_args_nm(ac, av, &options))
-		return 1;
+		return (1);
 	file = options.files;
 	count = files_list_count(options.files);
 	while (file)
 	{
 		if (open_binary(file->name, &binary))
-			return 2;
+			return (2);
 		if (nm(file->name, &options, &binary, count))
-			return 3;
+			return (3);
 		if (close_binary(file->name, &binary))
-			return 4;
+			return (4);
 		file = file->next;
 	}
 	files_list_del(&options.files);
-	return 0;
+	return (0);
 }

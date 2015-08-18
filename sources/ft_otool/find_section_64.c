@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_section_64.c                                 :+:      :+:    :+:   */
+/*   find_section_64.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plastic </var/spool/mail/plastic>          +#+  +:+       +#+        */
+/*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/08/12 09:28:33 by plastic           #+#    #+#             */
-/*   Updated: 2015/08/12 17:07:02 by plastic          ###   ########.fr       */
+/*   Created: 2015/08/18 18:01:26 by aeddi             #+#    #+#             */
+/*   Updated: 2015/08/18 18:13:09 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ static void	*get_section_offset_64(char *sectname, void *ptr)
 		while (count < seg->nsects)
 		{
 			if (ft_strcmp(sec->sectname, sectname) == 0)
-				return sec;
+				return (sec);
 			sec += 1;
 			count++;
 		}
 	}
-	return NULL;
+	return (NULL);
 }
 
 static void	*get_segment_offset_64(t_head *headers, char *segname)
@@ -47,11 +47,11 @@ static void	*get_segment_offset_64(t_head *headers, char *segname)
 	while (count < headers->mach64->ncmds)
 	{
 		if (ft_strcmp(seg->segname, segname) == 0)
-			return seg;
+			return (seg);
 		seg = (struct segment_command_64 *)((char *)seg + seg->cmdsize);
 		count++;
 	}
-	return NULL;
+	return (NULL);
 }
 
 void		find_section_64(t_head *headers, char *segname, char *sectname)

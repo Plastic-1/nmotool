@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:11:04 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/13 05:50:48 by plastic          ###   ########.fr       */
+/*   Updated: 2015/08/18 18:27:19 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ int				close_binary(char *filename, t_bin *binary);
 /*
 ** Parameters functions
 */
-int				parse_flags_ot(int ac, char **av, t_arg_ot *options, size_t *cnt);
+int				parse_flags_ot(int ac, char **av, t_arg_ot *opt, size_t *cnt);
 int				get_args_ot(int ac, char **av, t_arg_ot *options);
 
-int				parse_flags_nm(int ac, char **av, t_arg_nm *options, size_t *cnt);
+int				parse_flags_nm(int ac, char **av, t_arg_nm *opt, size_t *cnt);
 int				get_args_nm(int ac, char **av, t_arg_nm *options);
 
 /*

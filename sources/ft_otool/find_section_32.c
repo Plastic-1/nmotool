@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_section_32. c                                 :+:      :+:    :+:   */
+/*   find_section_32.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/04/23 14:43:16 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/13 05:42:21 by plastic          ###   ########.fr       */
+/*   Created: 2015/08/18 18:10:54 by aeddi             #+#    #+#             */
+/*   Updated: 2015/08/18 18:33:44 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ static void	*get_section_offset_32(char *sectname, void *ptr)
 		while (count < seg->nsects)
 		{
 			if (ft_strcmp(sec->sectname, sectname) == 0)
-				return sec;
+				return (sec);
 			sec += 1;
 			count++;
 		}
 	}
-	return NULL;
+	return (NULL);
 }
 
 static void	*get_segment_offset_32(t_head *headers, char *segname)
@@ -47,18 +47,18 @@ static void	*get_segment_offset_32(t_head *headers, char *segname)
 	while (count < headers->mach32->ncmds)
 	{
 		if (ft_strcmp(seg->segname, segname) == 0)
-			return seg;
+			return (seg);
 		seg = (struct segment_command *)((char *)seg + seg->cmdsize);
 		count++;
 	}
-	return NULL;
+	return (NULL);
 }
 
 void		find_section_32(t_head *headers, char *segname, char *sectname)
 {
 	struct segment_command	*seg;
 	struct section			*sec;
-	t_sect					section;
+	t_sect					sect;
 
 	if (headers->mach32->filetype == MH_OBJECT)
 		seg = (struct segment_command *)(headers->mach32 + 1);
@@ -67,10 +67,10 @@ void		find_section_32(t_head *headers, char *segname, char *sectname)
 	sec = (struct section *)get_section_offset_32(sectname, seg);
 	if (sec)
 	{
-		section.start = (char *)headers->mach32 + sec->offset;
-		section.end = section.start + sec->size;
-		section.offset = sec->addr;
-		section.len64 = FALSE;
-		print_section(&section, segname, sectname);
+		sect.start = (char *)headers->mach32 + sec->offset;
+		sect.end = sect.start + sec->size;
+		sect.offset = sec->addr;
+		sect.len64 = FALSE;
+		print_section(&sect, segname, sectname);
 	}
 }

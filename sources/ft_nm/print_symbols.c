@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 14:52:18 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/17 14:55:40 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/18 17:59:15 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ static boolean_t	is_printable(t_symlist *iter, t_arg_nm *opt)
 	else
 		undefined = FALSE;
 	if (opt->o_ext && !external)
-		return FALSE;
+		return (FALSE);
 	if (opt->o_undef && !undefined)
-		return FALSE;
+		return (FALSE);
 	if (opt->n_undef && undefined)
-		return FALSE;
-	return TRUE;
+		return (FALSE);
+	return (TRUE);
 }
 
 static void			print_sym(t_symlist *iter, t_arg_nm *opt, boolean_t len64)

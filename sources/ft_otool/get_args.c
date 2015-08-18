@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plastic </var/mail/plastic>                +#+  +:+       +#+        */
+/*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/08/11 17:14:39 by plastic           #+#    #+#             */
-/*   Updated: 2015/08/13 01:50:18 by plastic          ###   ########.fr       */
+/*   Created: 2015/08/18 18:02:40 by aeddi             #+#    #+#             */
+/*   Updated: 2015/08/18 18:03:09 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ static int	parse_args(int ac, char **av, t_arg_ot *options)
 		if (av[count][0] == '-')
 		{
 			if (parse_flags_ot(ac, av, options, &count))
-				return 1;
+				return (1);
 		}
 		else
 			files_list_add(&options->files, av[count]);
 		count++;
 	}
-	return 0;
+	return (0);
 }
 
 void		print_parse_error(char *filename, char *message)
@@ -61,16 +61,16 @@ int			get_args_ot(int ac, char **av, t_arg_ot *options)
 	options->sect_n = NULL;
 	options->arch = A_DEF;
 	if (parse_args(ac, av, options))
-		return 1;
+		return (1);
 	if (!options->p_text && !options->p_data && !options->p_cust)
 	{
 		print_parse_error(av[0], "You must set at least one section flag");
-		return 1;
+		return (1);
 	}
 	else if (files_list_count(options->files) == 0)
 	{
 		print_parse_error(av[0], "You must specify at least one file");
-		return 1;
+		return (1);
 	}
-	return 0;
+	return (0);
 }

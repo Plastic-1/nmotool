@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_flags.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plastic </var/spool/mail/plastic>          +#+  +:+       +#+        */
+/*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/08/12 15:06:11 by plastic           #+#    #+#             */
-/*   Updated: 2015/08/13 01:50:32 by plastic          ###   ########.fr       */
+/*   Created: 2015/08/18 18:05:22 by aeddi             #+#    #+#             */
+/*   Updated: 2015/08/18 18:05:24 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	parse_arch(int ac, char **av, t_arg_ot *options, size_t *count)
 				options->arch = A_ALL;
 			else
 				options->arch = A_X32;
-			return 0;
+			return (0);
 		}
 		else if (ft_strcmp(av[*count], "i386") == 0)
 		{
@@ -32,11 +32,11 @@ static int	parse_arch(int ac, char **av, t_arg_ot *options, size_t *count)
 				options->arch = A_ALL;
 			else
 				options->arch = A_X64;
-			return 0;
+			return (0);
 		}
 	}
 	print_parse_error(av[0], "You must specify a valid arch_flag");
-	return 1;
+	return (1);
 }
 
 static int	parse_sect_name(int ac, char **av, t_arg_ot *options, size_t *count)
@@ -47,10 +47,10 @@ static int	parse_sect_name(int ac, char **av, t_arg_ot *options, size_t *count)
 		options->seg_n = av[*count];
 		*count += 1;
 		options->sect_n = av[*count];
-		return 0;
+		return (0);
 	}
 	print_parse_error(av[0], "You must specify segment and section after -s");
-	return 1;
+	return (1);
 }
 
 static int	parse_sect_flag(char *flag, t_arg_ot *options)
@@ -67,16 +67,16 @@ static int	parse_sect_flag(char *flag, t_arg_ot *options)
 		else
 		{
 			print_parse_error(flag, "Invalid parameter");
-			return 1;
+			return (1);
 		}
 		count++;
 	}
 	if (count == 1)
 	{
 		print_parse_error(flag, "Invalid parameter");
-		return 1;
+		return (1);
 	}
-	return 0;
+	return (0);
 }
 
 int			parse_flags_ot(int ac, char **av, t_arg_ot *options, size_t *count)
@@ -84,13 +84,13 @@ int			parse_flags_ot(int ac, char **av, t_arg_ot *options, size_t *count)
 	if (ft_strcmp(av[*count], "-arch") == 0)
 	{
 		*count += 1;
-		return parse_arch(ac, av, options, count);
+		return (parse_arch(ac, av, options, count));
 	}
 	else if (ft_strcmp(av[*count], "-s") == 0)
 	{
 		*count += 1;
-		return parse_sect_name(ac, av, options, count);
+		return (parse_sect_name(ac, av, options, count));
 	}
 	else
-		return parse_sect_flag(av[*count], options);
+		return (parse_sect_flag(av[*count], options));
 }

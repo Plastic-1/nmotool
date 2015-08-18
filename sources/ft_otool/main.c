@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 14:43:16 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/17 15:42:57 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/18 18:03:59 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ static void	print_sections(t_arg_ot *options, t_head *headers, char *filename)
 		if (options->arch == A_ALL && headers->mach32)
 			print_filename_arch(filename, " (architecture x86_64)");
 		if (options->p_text)
-			find_section_64(headers, "__TEXT", "__text");
+			find_section_64(headers, SEG_TEXT, SECT_TEXT);
 		if (options->p_data)
-			find_section_64(headers, "__DATA", "__data");
+			find_section_64(headers, SEG_DATA, SECT_DATA);
 		if (options->p_cust)
 			find_section_64(headers, options->seg_n, options->sect_n);
 	}
@@ -42,9 +42,9 @@ static void	print_sections(t_arg_ot *options, t_head *headers, char *filename)
 		if (options->arch == A_ALL && headers->mach64)
 			print_filename_arch(filename, " (architecture i386)");
 		if (options->p_text)
-			find_section_32(headers, "__TEXT", "__text");
+			find_section_32(headers, SEG_TEXT, SECT_TEXT);
 		if (options->p_data)
-			find_section_32(headers, "__DATA", "__data");
+			find_section_32(headers, SEG_DATA, SECT_DATA);
 		if (options->p_cust)
 			find_section_32(headers, options->seg_n, options->sect_n);
 	}
@@ -60,12 +60,12 @@ static int	otool(char *filename, t_arg_ot *options, t_bin *binary)
 		ft_putstr(filename);
 		ft_putstr(": ");
 		ft_putendl("is not an object file");
-		return 1;
+		return (1);
 	}
 	if (options->arch == A_ALL && (!headers.mach32 || !headers.mach64))
 		print_filename_arch(filename, NULL);
 	print_sections(options, &headers, filename);
-	return 0;
+	return (0);
 }
 
 int			main(int ac, char **av)
@@ -75,18 +75,18 @@ int			main(int ac, char **av)
 	t_filelst		*file;
 
 	if (get_args_ot(ac, av, &options))
-		return 1;
+		return (1);
 	file = options.files;
 	while (file)
 	{
 		if (open_binary(file->name, &binary))
-			return 2;
+			return (2);
 		if (otool(file->name, &options, &binary))
-			return 3;
+			return (3);
 		if (close_binary(file->name, &binary))
-			return 4;
+			return (4);
 		file = file->next;
 	}
 	files_list_del(&options.files);
-	return 0;
+	return (0);
 }
