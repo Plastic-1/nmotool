@@ -13,6 +13,7 @@ a.out
 *.log
 *.sql
 *.sqlite
+tests/results
 
 # OS generated files #
 ######################
