@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 14:52:18 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/20 14:45:28 by aeddi            ###   ########.fr       */
+/*   Updated: 2015/08/20 16:19:38 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <libft.h>
 #include <nmotool.h>
 
-static t_symlist	*sort_list(t_symlist *root)
+static t_symlist	*sort_list(t_symlist *root, boolean_t rev)
 {
 	short			check;
 	int				diff;
@@ -29,7 +29,8 @@ static t_symlist	*sort_list(t_symlist *root)
 		while (iter->next)
 		{
 			diff = ft_strcmp(iter->name, iter->next->name);
-			if (diff > 0 /*|| (!diff && iter->n_value > iter->next->n_value)*/)
+			if (diff > 0
+				|| (!diff && iter->n_value < iter->next->n_value && !rev))
 			{
 				swap_symbols(iter, iter->next);
 				check++;
@@ -84,7 +85,7 @@ void				print_list(t_symlist *root, t_arg_nm *opt, boolean_t len64)
 	t_symlist		*iter;
 
 	if (!opt->p_unsort)
-		root = sort_list(root);
+		root = sort_list(root, opt->p_rev);
 	if (opt->p_rev && !opt->p_unsort)
 		iter = get_tail(root);
 	else

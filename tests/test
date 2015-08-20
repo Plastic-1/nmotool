@@ -11,11 +11,10 @@ NM=$SCRIPT_DIR/../ft_nm
 
 TEST_FILES="$SCRIPT_DIR/../objects/**/**.o "
 TEST_FILES+="/usr/lib/*.dylib "
-# TEST_FILES+="/usr/bin/* "
+TEST_FILES+="/usr/bin/* "
 
 for FILE in `ls $TEST_FILES`
 do
-
 	$OTOOL -td -arch x86_64 -arch i386 -s __TEXT __const $FILE > "$RESULT_DIR/$COUNT-ot-a" 2> /dev/null
 	otool -td -arch x86_64 -arch i386 -s __TEXT __const $FILE > "$RESULT_DIR/$COUNT-ot-b" 2> /dev/null
 	DIF_OT=$( diff "$RESULT_DIR/$COUNT-ot-a" "$RESULT_DIR/$COUNT-ot-b" )
@@ -31,7 +30,7 @@ do
 	DIF_NM=$( diff "$RESULT_DIR/$COUNT-nm-a" "$RESULT_DIR/$COUNT-nm-b" )
 	if [ -n "$DIF_NM" ]
 	then
-		echo "Diff otool for $FILE ($COUNT-nm-a / $COUNT-nm-b):"
+		echo "Diff nm for $FILE ($COUNT-nm-a / $COUNT-nm-b):"
 		echo -e "$DIF_NM"
 		echo -e "\n==========================================\n"
 	fi
