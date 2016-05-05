@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 13:57:23 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/18 17:54:00 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/05 18:52:13 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 #include <libft.h>
 #include <nmotool.h>
 
-static void	get_sect_names(struct segment_command_64 *seg, char *sect_names[])
+static void	get_sect_names(struct segment_command_64 *seg, char *sect_names[],
+		int reset)
 {
-	static size_t		index = 0;
+	static size_t		index;
 	size_t				count;
 	struct section_64	*sec;
 
+	if (reset)
+		index = 0;
 	count = 0;
 	sec = (struct section_64 *)(seg + 1);
 	while (count < seg->nsects)
@@ -75,7 +78,7 @@ void		find_symbols_64(t_head *headers, t_arg_nm *options)
 	while (count < headers->mach64->ncmds)
 	{
 		if (seg->cmd == LC_SEGMENT_64)
-			get_sect_names(seg, sect_names);
+			get_sect_names(seg, sect_names, !count);
 		if (seg->cmd == LC_SYMTAB)
 			fill_list((struct symtab_command *)seg, &root, headers->mach64);
 		seg = (struct segment_command_64 *)((char *)seg + seg->cmdsize);

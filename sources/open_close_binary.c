@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 14:43:16 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/18 17:44:59 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/05 15:51:06 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
 #include <libft.h>
 #include <struct.h>
 
-static void	print_file_error(char *filename, char *message)
+void		print_file_error(char *filename, char *message)
 {
+	ft_putstr_fd("ft_nm: ", 2);
 	ft_putstr_fd(filename, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(message, 2);
@@ -35,15 +36,15 @@ int			open_binary(char *filename, t_bin *binary)
 								PROT_READ, MAP_PRIVATE, binary->fd, 0);
 			if (binary->data != (void *)-1)
 				return (0);
-			else
-				print_file_error(filename, "file maping impossible");
+			else if (binary->st.st_mode & S_IFDIR)
+				print_file_error(filename, "Is a directory.");
 		}
 		else
 			print_file_error(filename, "file stating impossible");
 		close(binary->fd);
 	}
 	else
-		print_file_error(filename, "file openning impossible");
+		print_file_error(filename, "file opening impossible");
 	return (1);
 }
 

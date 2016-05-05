@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/18 17:56:59 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/05 19:04:50 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static void	print_symbols(char *filename, t_arg_nm *options, t_head *headers)
 			print_filename_arch(filename, " (for architecture x86_64)");
 		find_symbols_64(headers, options);
 	}
-	if (headers->mach32 && (options->arch == A_ALL || options->arch == A_X32))
+	if (headers->mach32 && ((options->arch == A_ALL || options->arch == A_X32)
+			|| (options->arch == A_DEF && !headers->mach64)))
 	{
 		if (options->arch == A_ALL && headers->mach64)
 			print_filename_arch(filename, " (for architecture i386)");
@@ -46,9 +47,20 @@ static int	nm(char *filename, t_arg_nm *options, t_bin *binary, size_t count)
 
 	get_binary_headers(binary->data, &headers);
 	if (!headers.mach32 && !headers.mach64)
+	{
+		print_file_error(filename,
+				"The file was not recognized as a valid object file.");
 		return (1);
-	if ((options->arch == A_ALL && (!headers.mach32 || !headers.mach64))
-		&& count > 1)
+	}
+	if ((!headers.mach32 && options->arch == A_X32) ||
+		(!headers.mach64 && options->arch == A_X64))
+		print_file_error(filename, "No architecture specified.");
+	else if (((options->arch == A_ALL && (!headers.mach32 || !headers.mach64))
+		|| options->arch == A_DEF ||
+		(options->arch == A_X32 && headers.mach32 && !headers.mach64) ||
+		(options->arch == A_X64 && headers.mach64 && !headers.mach32))
+		&& count > 1
+		&& !(options->arch == A_DEF && headers.mach32 && headers.mach64))
 		print_filename_arch(filename, NULL);
 	print_symbols(filename, options, &headers);
 	return (0);
@@ -67,12 +79,12 @@ int			main(int ac, char **av)
 	count = files_list_count(options.files);
 	while (file)
 	{
-		if (open_binary(file->name, &binary))
-			return (2);
-		if (nm(file->name, &options, &binary, count))
-			return (3);
-		if (close_binary(file->name, &binary))
-			return (4);
+		if (!open_binary(file->name, &binary))
+		{
+			nm(file->name, &options, &binary, count);
+			if (close_binary(file->name, &binary))
+				return (4);
+		}
 		file = file->next;
 	}
 	files_list_del(&options.files);

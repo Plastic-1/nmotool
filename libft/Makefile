@@ -6,13 +6,13 @@
 #    By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/22 12:06:57 by aeddi             #+#    #+#              #
-#    Updated: 2015/08/14 12:17:15 by plastic          ###   ########.fr        #
+#    Updated: 2016/04/22 16:12:16 by aeddi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			=	libft.a
 CC				=	cc
-CFLAGS			=	-Wall -Wextra -Werror -I $(INCS_DIR)
+CFLAGS			=	-Wall -Wextra -Werror -I $(INCS_DIR) -g3
 AR				=	ar
 ARFLAGS			=	rc
 INCS_DIR		=	./includes

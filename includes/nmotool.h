@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:11:04 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/18 18:27:19 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/05 15:44:22 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void			find_symbols_64(t_head *headers, t_arg_nm *options);
 /*
 ** File functions
 */
+void			print_file_error(char *filename, char *message);
 int				open_binary(char *filename, t_bin *binary);
 int				close_binary(char *filename, t_bin *binary);
 
