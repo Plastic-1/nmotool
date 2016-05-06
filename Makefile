@@ -55,6 +55,9 @@ OBJS_NM			=	$(patsubst %.c, $(OBJS_NM_DIR)/%.o, $(SRCS_NM))
 
 all				:	$(NAME) $(NAME2)
 
+test			:	$(NAME) $(NAME2)
+	@bash tests/tests.sh
+
 $(NAME)			:	$(OBJS_DIR) $(OBJS) $(OBJS_OT)
 	$(CC) -o $(NAME) $(OBJS) $(OBJS_OT) $(LFLAGS)
 
