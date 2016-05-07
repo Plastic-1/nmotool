@@ -21,10 +21,10 @@ FLAGS_LIST=(
 	'-t'
 	'-t -arch i386'
 	'-t -arch x86_64'
-	'-t -arch i386 -arch x86_64'
+	'-t -arch x86_64 -arch i386'
 	'-d'
 	'-d -arch i386'
-	'-s __DATA __data -arch i386 -arch x86_64'
+	'-s __DATA __data -arch x86_64 -arch i386'
 	'-s __DATA __dyld'
 )
 

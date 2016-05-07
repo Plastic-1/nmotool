@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 14:43:16 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/18 18:03:59 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/07 14:27:09 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,22 @@ static void	print_sections(t_arg_ot *options, t_head *headers, char *filename)
 		if (options->arch == A_ALL && headers->mach32)
 			print_filename_arch(filename, " (architecture x86_64)");
 		if (options->p_text)
-			find_section_64(headers, SEG_TEXT, SECT_TEXT);
+			find_section_64(headers, SEG_TEXT, SECT_TEXT, 0);
 		if (options->p_data)
-			find_section_64(headers, SEG_DATA, SECT_DATA);
+			find_section_64(headers, SEG_DATA, SECT_DATA, 0);
 		if (options->p_cust)
-			find_section_64(headers, options->seg_n, options->sect_n);
+			find_section_64(headers, options->seg_n, options->sect_n, 1);
 	}
 	if (headers->mach32 && (options->arch == A_ALL || options->arch == A_X32))
 	{
 		if (options->arch == A_ALL && headers->mach64)
 			print_filename_arch(filename, " (architecture i386)");
 		if (options->p_text)
-			find_section_32(headers, SEG_TEXT, SECT_TEXT);
+			find_section_32(headers, SEG_TEXT, SECT_TEXT, 0);
 		if (options->p_data)
-			find_section_32(headers, SEG_DATA, SECT_DATA);
+			find_section_32(headers, SEG_DATA, SECT_DATA, 0);
 		if (options->p_cust)
-			find_section_32(headers, options->seg_n, options->sect_n);
+			find_section_32(headers, options->seg_n, options->sect_n, 1);
 	}
 }
 
@@ -62,7 +62,10 @@ static int	otool(char *filename, t_arg_ot *options, t_bin *binary)
 		ft_putendl("is not an object file");
 		return (1);
 	}
-	if (options->arch == A_ALL && (!headers.mach32 || !headers.mach64))
+	if (options->arch == A_DEF
+		|| (options->arch == A_ALL && (!headers.mach32 || !headers.mach64))
+		|| (options->arch == A_X32 && headers.mach32)
+		|| (options->arch == A_X64 && headers.mach64))
 		print_filename_arch(filename, NULL);
 	print_sections(options, &headers, filename);
 	return (0);
@@ -79,12 +82,12 @@ int			main(int ac, char **av)
 	file = options.files;
 	while (file)
 	{
-		if (open_binary(file->name, &binary))
-			return (2);
-		if (otool(file->name, &options, &binary))
-			return (3);
-		if (close_binary(file->name, &binary))
-			return (4);
+		if (!open_binary(file->name, &binary))
+		{
+			otool(file->name, &options, &binary);
+			if (close_binary(file->name, &binary))
+				return (2);
+		}
 		file = file->next;
 	}
 	files_list_del(&options.files);

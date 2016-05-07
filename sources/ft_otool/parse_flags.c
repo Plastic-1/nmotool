@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/18 18:05:22 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/18 18:05:24 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/07 13:17:25 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	parse_arch(int ac, char **av, t_arg_ot *options, size_t *count)
 {
 	if (*count < (size_t)ac)
 	{
-		if (ft_strcmp(av[*count], "x86_64") == 0)
+		if (ft_strcmp(av[*count], "i386") == 0)
 		{
 			if (options->arch == A_ALL || options->arch == A_X64)
 				options->arch = A_ALL;
@@ -26,7 +26,7 @@ static int	parse_arch(int ac, char **av, t_arg_ot *options, size_t *count)
 				options->arch = A_X32;
 			return (0);
 		}
-		else if (ft_strcmp(av[*count], "i386") == 0)
+		else if (ft_strcmp(av[*count], "x86_64") == 0)
 		{
 			if (options->arch == A_ALL || options->arch == A_X32)
 				options->arch = A_ALL;

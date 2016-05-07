@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:11:04 by aeddi             #+#    #+#             */
-/*   Updated: 2016/05/05 15:44:22 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/07 14:29:54 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 */
 void			get_binary_headers(void *ptr, t_head *headers);
 
-void			find_section_32(t_head *headers, char *segname, char *sectname);
-void			find_section_64(t_head *headers, char *segname, char *sectname);
+void			find_section_32(t_head *head, char *seg, char *sect, int cust);
+void			find_section_64(t_head *head, char *seg, char *sect, int cust);
 
 void			find_symbols_32(t_head *headers, t_arg_nm *options);
 void			find_symbols_64(t_head *headers, t_arg_nm *options);
@@ -49,7 +49,7 @@ void			print_byte_to_hex(char byte);
 void			print_ptr_to_hex(size_t ptr, boolean_t prefix, boolean_t len64);
 void			print_parse_error(char *filename, char *message);
 
-void			print_section(t_sect *section, char *segname, char *sectname);
+void			print_section(t_sect *section, char *seg, char *sect, int cust);
 
 void			print_list(t_symlist *root, t_arg_nm *options, boolean_t len64);
 void			get_symbols_letters(t_symlist *root, char *sect_names[]);

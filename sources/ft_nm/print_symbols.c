@@ -6,7 +6,7 @@
 /*   By: aeddi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/13 14:52:18 by aeddi             #+#    #+#             */
-/*   Updated: 2016/05/05 18:09:03 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/07 14:48:30 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static boolean_t	is_printable(t_symlist *iter, t_arg_nm *opt)
 
 static void			print_sym(t_symlist *iter, t_arg_nm *opt, boolean_t len64)
 {
-	if (!opt->p_short)
+	if (!opt->p_short && !opt->o_undef)
 	{
 		if ((iter->n_type & N_TYPE) != N_UNDF)
 			print_ptr_to_hex(iter->n_value, FALSE, len64);

@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/18 16:31:52 by aeddi             #+#    #+#             */
-/*   Updated: 2015/08/17 14:14:43 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/07 14:32:24 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 #include <libft.h>
 #include <nmotool.h>
 
-static void	print_section_name(char *segname, char *sectname)
+static void	print_section_name(char *segname, char *sectname, int custom)
 {
-	if (!(!ft_strcmp(segname, "__TEXT") && !ft_strcmp(sectname, "__text")) &&
-		!(!ft_strcmp(segname, "__DATA") && !ft_strcmp(sectname, "__data")))
+	if (custom)
 		ft_putstr("Contents of ");
 	ft_putchar('(');
 	ft_putstr(segname);
@@ -27,15 +26,15 @@ static void	print_section_name(char *segname, char *sectname)
 	ft_putendl(") section");
 }
 
-void		print_section(t_sect *section, char *segname, char *sectname)
+void		print_section(t_sect *section, char *seg, char *sect, int cust)
 {
 	size_t	offset;
 	short	count;
 	char	delim;
 
 	offset = 0;
-	print_section_name(segname, sectname);
-	if (!ft_strcmp(segname, "__TEXT") && !ft_strcmp(sectname, "__text"))
+	print_section_name(seg, sect, cust);
+	if (!ft_strcmp(seg, "__TEXT") && !ft_strcmp(sect, "__text"))
 		delim = ' ';
 	else
 		delim = '\t';

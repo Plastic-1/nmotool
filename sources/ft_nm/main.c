@@ -6,7 +6,7 @@
 /*   By: aeddi <aeddi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/23 18:03:20 by aeddi             #+#    #+#             */
-/*   Updated: 2016/05/05 19:04:50 by aeddi            ###   ########.fr       */
+/*   Updated: 2016/05/07 13:37:14 by aeddi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int			main(int ac, char **av)
 		{
 			nm(file->name, &options, &binary, count);
 			if (close_binary(file->name, &binary))
-				return (4);
+				return (2);
 		}
 		file = file->next;
 	}
